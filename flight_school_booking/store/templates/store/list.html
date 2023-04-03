@@ -1,0 +1,25 @@
+{#<div style="display: flex;justify-content: center; flex-direction: column">#}
+
+
+{% if flight_schools|length_is:"0" %}
+    <div class="text-center">
+      Nous n'avons trouvé aucun résultat à cette requête.
+    </div>
+
+{% else %}
+<ul>
+    {% for flight_school in flight_schools %}
+        <div class="row text-center" >
+            <a href="{% url 'store:detail' flight_school_id=flight_school.id %}">
+                <img class="img-responsive" style="height: 150px; margin-left: 35%" src="{{ flight_school.picture }}">
+            </a>
+            <h3><a href="{% url 'store:detail' flight_school_id=flight_school.id %}">{{ flight_school.name }}</a></h3>
+        </div>
+        {% if forloop.counter|divisibleby:1 %}<div class="clearfix"></div><hr>{% endif %}
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+
+{#</div>#}

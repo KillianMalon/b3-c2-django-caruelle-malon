@@ -1,0 +1,9 @@
+    {% extends 'store/base.html' %}
+
+    {% block content %}
+        <div style="display:flex;justify-content: center">
+            <h2 style="text-decoration: underline; margin:5% 0 5% 0">Liste de toutes les écoles </h2>
+        </div>
+        {% include 'store/list.html' with list_title='Toutes les écoles' %}
+
+    {% endblock %}
