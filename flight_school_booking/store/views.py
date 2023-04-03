@@ -30,6 +30,18 @@ def detail(request, flight_school_id):
     }
     return render(request, 'store/detail.html', context)
 
+def school(request):
+    school_bookings = Booking.objects.filter(user_id=request.user.id)
+    flight_schools = []
+    for school_booking in school_bookings:
+        flight_school = FlightSchool.objects.get(pk=school_booking.flightschool_id)
+        flight_schools.append(flight_school)
+    context = {
+        'school_bookings': school_bookings,
+        'flight_schools': flight_schools
+    }
+    return render(request, 'store/schools.html', context)
+
 def search(request):
     query = request.GET.get('query')
     if not query:
@@ -56,3 +68,32 @@ def register(request):
             login(request, user)
             return redirect(settings.LOGIN_REDIRECT_URL)
     return render(request, 'store/register.html', context={'form': form})
+
+def add(request, flight_school_id):
+    user = request.user
+    flight_school = FlightSchool.objects.get(pk=flight_school_id)
+    booking = Booking.objects.create(user_id=user.id, flightschool_id=flight_school.id)
+    booking.save()
+    flight_school.available = False
+    flight_school.save()
+
+    return redirect(reverse("store:detail", kwargs={"flight_school_id": flight_school_id}))
+
+
+def delete(request, booking_id):
+    booking = Booking.objects.get(user=request.user, id=booking_id)
+    booking.delete()
+    flight_school = FlightSchool.objects.get(id=booking.flightschool_id)
+    flight_school.available = True
+    flight_school.save()
+
+    school_bookings = Booking.objects.filter(user_id=request.user.id)
+    flight_schools = []
+    for school_booking in school_bookings:
+        flight_school = FlightSchool.objects.get(pk=school_booking.flightschool_id)
+        flight_schools.append(flight_school)
+    context = {
+        'school_bookings': school_bookings,
+        'flight_schools': flight_schools
+    }
+    return render(request, 'store/schools.html',context)

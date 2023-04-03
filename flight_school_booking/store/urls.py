@@ -10,5 +10,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name="store/login.html", redirect_authenticated_user=True), name='login'),
     path('/', LogoutView.as_view(), name='logout'),
     path('/register', views.register, name='register'),
-
+    path('schools/', views.school, name='school'),
+    path('school/<int:flight_school_id>/add', views.add, name='add'),
+    path('delete/<booking_id>', views.delete, name='delete'),
 ]

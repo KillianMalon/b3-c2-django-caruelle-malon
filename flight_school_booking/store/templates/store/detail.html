@@ -1,0 +1,37 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<hr>
+<h1 class="intro-text text-center">{{ flight_school_name }}, {{ flight_school_location }}</h1>
+<hr class="detail-separator">
+<div class="col-md-6">
+  <img src="{{ flight_school_picture }}" alt="{{ flight_school_name }}" class="img-responsive">
+</div>
+<div class="col-md-6">
+
+  <h2 class="text-center artist_name">Réserver {{ flight_school_name }} </h2>
+      <input type="hidden" class="hidden" value="{{ flight_school.id }}" name="flight_school_id">
+      {% if request.user.is_authenticated %}
+          {% if flight_school_available %}
+              <a href="{% url 'store:add' flight_school_id %}" class="btn btn-success">Réserver</a>
+          {% else %}
+              <h3>Cette école n'est plus disponible</h3>
+          {% endif %}
+      {% else %}
+          <h3>Connectez vous pour pouvoir réserver</h3>
+      {% endif %}
+
+    {% if errors %}
+    <div>
+      {% for key, error in errors %}
+      {% autoescape off %}
+        {{ error }}
+      {% endautoescape %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+
+{% endblock %}
