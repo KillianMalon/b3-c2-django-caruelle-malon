@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from .models import User, FlightSchool, Booking
+from django.contrib.auth import login
+
 
 # Create your views here.
 
@@ -23,3 +25,19 @@ def detail(request, flight_school_id):
         'flight_school_available': flight_school.available,
     }
     return render(request, 'store/detail.html', context)
+
+def search(request):
+    query = request.GET.get('query')
+    if not query:
+        flight_schools = FlightSchool.objects.all()
+    else:
+        flight_schools = FlightSchool.objects.filter(name__icontains=query)
+    if not flight_schools.exists():
+        flight_schools = "Aucun résultats"
+
+    title = "Résultats pour la requête %s"%query
+    context = {
+        'flight_schools': flight_schools,
+        'Nom': title
+    }
+    return render(request, 'store/search.html', context)
