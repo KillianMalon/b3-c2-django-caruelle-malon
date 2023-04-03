@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from .models import User, FlightSchool, Booking
 from django.contrib.auth import login
+from . import forms
+from django.shortcuts import render, redirect
+
+
 
 
 # Create your views here.
@@ -41,3 +45,14 @@ def search(request):
         'Nom': title
     }
     return render(request, 'store/search.html', context)
+
+def register(request):
+    form = forms.SignupForm()
+    if request.method == 'POST':
+        form = forms.SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # auto-login user
+            login(request, user)
+            return redirect(settings.LOGIN_REDIRECT_URL)
+    return render(request, 'store/register.html', context={'form': form})

@@ -9,5 +9,6 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('login/', LoginView.as_view(template_name="store/login.html", redirect_authenticated_user=True), name='login'),
     path('/', LogoutView.as_view(), name='logout'),
+    path('/register', views.register, name='register'),
 
 ]
